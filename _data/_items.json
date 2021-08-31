@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Pepsi",
+    "wholesalePrice": 5,
+    "sellingPrice": 15,
+    "stockQuantity": 100,
+    "categoryId": 2
+  },
+  {
+    "name": "Burger",
+    "wholesalePrice": 15,
+    "sellingPrice": 45,
+    "stockQuantity": 100,
+    "categoryId": 1
+  }
+]

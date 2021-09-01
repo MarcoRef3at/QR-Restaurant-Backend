@@ -18,7 +18,7 @@ dotenv.config({ path: "./config/config.env" });
 connectDB();
 
 // Route Files
-// const users = require("./routes/users");
+const cheques = require("./routes/cheques");
 
 const app = express();
 
@@ -53,7 +53,7 @@ app.use(limiter);
 app.use(hpp());
 
 // Mount Routers
-// app.use("/api/v2/users", users);
+app.use("/cheque", cheques);
 
 app.use(errorHandler);
 

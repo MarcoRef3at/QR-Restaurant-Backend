@@ -3,7 +3,7 @@ const itemsInit = require("./itemsInit");
 const tablesInit = require("./tabelsInit");
 
 module.exports = async () => {
-  await tablesInit();
   await categoriesInit();
+  await tablesInit();
   await itemsInit();
 };

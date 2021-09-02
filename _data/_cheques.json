@@ -1,0 +1,14 @@
+[
+  {
+    "tableId": 1,
+    "isClosed": false
+  },
+  {
+    "tableId": 2,
+    "isClosed": true
+  },
+  {
+    "tableId": 2,
+    "isClosed": false
+  }
+]

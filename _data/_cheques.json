@@ -5,10 +5,12 @@
     "isClosed": false
   },
   {
+    "id": 2,
     "tableId": 2,
     "isClosed": true
   },
   {
+    "id": 3,
     "tableId": 2,
     "isClosed": false
   }

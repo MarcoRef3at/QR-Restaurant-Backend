@@ -17,9 +17,6 @@ dotenv.config({ path: "./config/config.env" });
 // Connect to database
 connectDB();
 
-// Route Files
-const cheques = require("./routes/cheques");
-
 const app = express();
 
 // Body Parser
@@ -45,7 +42,7 @@ app.use(xss());
 // Rate Limiting
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, //10 minutes
-  max: 100, //100 requests per 10 minutes
+  max: 100 //100 requests per 10 minutes
 });
 app.use(limiter);
 
@@ -53,7 +50,8 @@ app.use(limiter);
 app.use(hpp());
 
 // Mount Routers
-app.use("/cheque", cheques);
+app.use("/cheque", require("./routes/cheques"));
+app.use("/order", require("./routes/orders"));
 
 app.use(errorHandler);
 

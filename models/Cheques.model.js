@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const { Op } = require("sequelize");
 
-module.exports = (sequelize) => {
+module.exports = sequelize => {
   sequelize.define(
     "cheques",
     {
@@ -9,42 +9,41 @@ module.exports = (sequelize) => {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER
       },
       isClosed: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: false,
+        defaultValue: false
       },
       isVoid: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
-        validate: {},
-      },
+        validate: {}
+      }
       // Table Id
     },
     {
       hooks: {
-        // Encrypt Password
-        beforeCreate: async (cheque) => {
+        beforeCreate: async cheque => {
           if (cheque.tableId) {
             let found = await sequelize.models.cheques.findAll({
               where: {
                 [Op.and]: [
                   { tableId: cheque.tableId },
                   { isClosed: false },
-                  { isVoid: false },
-                ],
-              },
+                  { isVoid: false }
+                ]
+              }
             });
 
             if (found.length > 0) {
               throw new Error("Selected Table already has an open cheque");
             }
           }
-        },
-      },
+        }
+      }
     }
   );
 };

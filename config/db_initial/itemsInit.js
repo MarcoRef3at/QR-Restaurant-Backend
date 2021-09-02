@@ -6,13 +6,13 @@ const itemsInit = async () => {
   items
     .bulkCreate(_ITEMS, {
       validate: true,
-      individualHooks: true,
+      individualHooks: true
     })
-    .then(async (user) => {
+    .then(async user => {
       const count = await items.count();
       console.log("items created:".bgYellow.black.bold, count);
     })
-    .catch((e) => {
+    .catch(e => {
       console.log("items initializing error".red.bold);
     });
 };

@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 
-module.exports = sequelize => {
+module.exports = (sequelize) => {
   sequelize.define(
     "orders",
     {
@@ -8,60 +8,88 @@ module.exports = sequelize => {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
       },
       itemId: {
         allowNull: false,
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
       },
       unitPrice: {
         allowNull: false,
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
       },
       quantity: {
         allowNull: false,
         type: DataTypes.INTEGER,
-        defaultValue: 1
+        defaultValue: 1,
       },
       chequeId: {
         allowNull: false,
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
       },
       isDone: {
         allowNull: false,
         type: DataTypes.BOOLEAN,
-        defaultValue: false
-      }
+        defaultValue: false,
+      },
     },
     {
       hooks: {
-        beforeBulkDestroy: async order => {
+        // Validate Cheque is open before deleting order
+        beforeBulkDestroy: async (order) => {
+          // Get Orders Ids
           let ordersIds = order.where.id;
-          if (typeof ordersIds == "object") {
-            let validIds = await ordersIds.forEach(id => {
-              if (id == 1) {
-                return true;
-              } else {
-                return false;
-              }
-            });
-            console.log("validIds:", validIds);
-          }
-          // Validate cheque is open
-          // let orderz = await sequelize.models.orders.findAll({
-          //   where: { id: req.body.ids },
-          //   include: [
-          //     {
-          //       model: cheques,
-          //       attributes: ["id", "isClosed", "isVoid"]
-          //     }
-          //   ]
-          // });
-          // console.log("orderz:", orderz);
+          let invalidIds = [];
 
-          throw new Error("Cannot delete order of a closed cheque!");
+          // Get the order's associated cheque
+          let orders = await sequelize.models.orders.findAll({
+            where: { id: ordersIds },
+            include: [
+              {
+                model: sequelize.models.cheques,
+                attributes: ["id", "isClosed", "isVoid"],
+              },
+            ],
+          });
+
+          // If orders were in an array
+          if (typeof orders == "object") {
+            await Promise.all(
+              // Loop over the orders to find their cheque status
+              orders.map(async (order) => {
+                // Validate cheque is open and not void
+                let { isClosed, isVoid } = order.cheque;
+                if (isClosed || isVoid) {
+                  // If Cheque status is closed add the order id to invalidIds Array
+                  return invalidIds.push(order.id);
+                }
+              })
+            );
+          }
+
+          // Finally, If there is Invalid order Ids inside the array
+          if (invalidIds.length > 0) {
+            // Get The other Valid order Ids
+            let validIds = ordersIds.filter((x) => !invalidIds.includes(x));
+            // Remove the Valid ones
+            return sequelize.models.orders
+              .destroy({
+                where: { id: validIds },
+              })
+              .then(() => {
+                // Throw Error with what was deleted and what wasn't
+                throw new Error(
+                  `${
+                    validIds.length > 0
+                      ? `Orders [${validIds}] Were deleted Successfully but`
+                      : ""
+                  } Couldn't delete orders [${invalidIds}] as they are associated to closed cheques!`
+                );
+              });
+          }
         },
-        beforeValidate: async order => {
+
+        beforeValidate: async (order) => {
           // Validates ItemId and stock available quantity
           let sellingPrice = await getCurrentSellingPrice(
             order.itemId,
@@ -70,8 +98,8 @@ module.exports = sequelize => {
           await validateChequeId(order, sellingPrice);
 
           // TODO: subtract quantity on order close
-        }
-      }
+        },
+      },
     }
   );
 

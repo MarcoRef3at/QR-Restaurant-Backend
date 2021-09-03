@@ -3,13 +3,18 @@ const {
   createOrderByChequeId,
 } = require("./createOrder");
 const { deleteOrder } = require("./deleteOrder");
-const { getOrder, getOrderByChequeId } = require("./getOrder");
+const {
+  getOrder,
+  getOrderByChequeId,
+  getOrderByTableId,
+} = require("./getOrder");
 const { updatetOrder } = require("./updatetOrder");
 module.exports = {
   createOrderByTableId,
   createOrderByChequeId,
   getOrder,
   getOrderByChequeId,
+  getOrderByTableId,
   deleteOrder,
   updatetOrder,
 };

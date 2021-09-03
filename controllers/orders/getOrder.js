@@ -2,7 +2,8 @@ const asyncHandler = require("../../middleware/async");
 const sequelize = require("../../sequelize");
 const ErrorResponse = require("../../utils/errorResponse");
 const { execludeAttribute, includeDevices } = require("./_functions");
-const { orders, cheques } = sequelize.models;
+const { orders, cheques, tables } = sequelize.models;
+const { Op } = require("sequelize");
 
 // Get All Orders & Get Singlie Order
 exports.getOrder = asyncHandler(async (req, res, next) => {
@@ -46,6 +47,42 @@ exports.getOrderByChequeId = asyncHandler(async (req, res, next) => {
     }
   } else {
     // IF Found Orders
+    res.status(200).json({ success: true, data: availableOrders });
+  }
+});
+
+// /table/:id
+exports.getOrderByTableId = asyncHandler(async (req, res, next) => {
+  let tableId = req.params.id;
+
+  // Get Opened Cheques of the requested table id
+  let availableCheque = await cheques.findOne({
+    where: {
+      [Op.and]: [{ tableId }, { isClosed: false }, { isVoid: false }],
+    },
+  });
+
+  // IF No Open Cheque
+  if (availableCheque == null) {
+    // Validate table id
+    let table = await tables.findByPk(tableId);
+    if (table == null) {
+      return next(
+        new ErrorResponse("There is no Table with the requested id", 400)
+      );
+    }
+    return next(
+      new ErrorResponse("There is no Open Cheque for the requested Table", 400)
+    );
+  } else {
+    // if found cheques get it's orders
+    let availableOrders = await orders.findAll(
+      { where: { chequeId: availableCheque.id } },
+      {
+        ...execludeAttribute,
+      }
+    );
+
     res.status(200).json({ success: true, data: availableOrders });
   }
 });

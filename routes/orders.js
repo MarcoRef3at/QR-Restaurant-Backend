@@ -4,6 +4,7 @@ const {
   createOrderByTableId,
   getOrder,
   getOrderByChequeId,
+  getOrderByTableId,
   deleteOrder,
   updatetOrder,
 } = require("../controllers/orders");
@@ -14,6 +15,7 @@ router.route("/").post(createOrderByChequeId).delete(deleteOrder);
 router.route("/:id").get(getOrder).put(updatetOrder);
 
 router.route("/cheque/:id").get(getOrderByChequeId);
+router.route("/table/:id").get(getOrderByTableId);
 
 router.route("/:tableId").post(createOrderByTableId);
 

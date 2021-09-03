@@ -10,13 +10,11 @@ const {
 } = require("../controllers/orders");
 const router = express.Router();
 
-router.route("/").post(createOrderByChequeId).delete(deleteOrder);
+router.route("/").delete(deleteOrder);
 
 router.route("/:id").get(getOrder).put(updatetOrder);
 
-router.route("/cheque/:id").get(getOrderByChequeId);
-router.route("/table/:id").get(getOrderByTableId);
-
-router.route("/:tableId").post(createOrderByTableId);
+router.route("/cheque/:id").get(getOrderByChequeId).post(createOrderByChequeId);
+router.route("/table/:id").get(getOrderByTableId).post(createOrderByTableId);
 
 module.exports = router;

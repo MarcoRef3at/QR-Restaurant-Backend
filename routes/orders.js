@@ -1,14 +1,17 @@
 const express = require("express");
 const {
-  createOrder,
+  createOrderByChequeId,
+  createOrderByTableId,
   getOrder,
   deleteOrder,
-  updatetOrder
+  updatetOrder,
 } = require("../controllers/orders");
 const router = express.Router();
 
-router.route("/").post(createOrder).delete(deleteOrder);
+router.route("/").post(createOrderByChequeId).delete(deleteOrder);
 
 router.route("/:id").get(getOrder).put(updatetOrder);
+
+router.route("/:tableId").post(createOrderByTableId);
 
 module.exports = router;

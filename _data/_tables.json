@@ -6,5 +6,9 @@
   {
     "number": 2,
     "capacity": 4
+  },
+  {
+    "number": 3,
+    "capacity": 4
   }
 ]

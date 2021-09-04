@@ -32,7 +32,12 @@ exports.getChequeOrders = asyncHandler(async (req, res, next) => {
 
   orderz = sumUpQuantitiesAndPrice(orderz);
 
-  res.status(200).json({ success: true, data: orderz });
+  // Get Cheque Total price
+  let total = orderz.reduce(
+    (acc, curr) => acc.dataValues.totalPrice + curr.dataValues.totalPrice
+  );
+
+  res.status(200).json({ success: true, total, data: orderz });
 });
 
 const sumUpQuantitiesAndPrice = orderz => {

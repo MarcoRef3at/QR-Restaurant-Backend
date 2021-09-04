@@ -15,10 +15,10 @@ const sequelize = new Sequelize(
     // storage: "debugger.mysql",
     operatorAliases: false,
     define: {
-      freezeTableName: true,
+      freezeTableName: true
       // timestamps: false,
     },
-    logging: false,
+    logging: false
   }
 );
 
@@ -27,7 +27,8 @@ const modelDefiners = [
   require("../models/Cheques.model"),
   require("../models/Items.model"),
   require("../models/Orders.model"),
-  require("../models/Tables.model"),
+  require("../models/paymentTypes.model"),
+  require("../models/Tables.model")
 ];
 
 //define all models according to their files.

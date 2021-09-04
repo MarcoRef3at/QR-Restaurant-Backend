@@ -1,5 +1,6 @@
 function applyExtraSetup(sequelize) {
-  const { categories, cheques, items, orders, tables } = sequelize.models;
+  const { categories, cheques, items, orders, tables, payments, paymentTypes } =
+    sequelize.models;
   items.belongsTo(categories);
   categories.hasMany(items);
 
@@ -10,6 +11,11 @@ function applyExtraSetup(sequelize) {
 
   cheques.belongsTo(tables);
   tables.hasMany(cheques);
+
+  payments.belongsTo(cheques);
+  payments.belongsTo(paymentTypes);
+  cheques.hasOne(payments);
+  paymentTypes.hasMany(payments);
 }
 
 module.exports = { applyExtraSetup };

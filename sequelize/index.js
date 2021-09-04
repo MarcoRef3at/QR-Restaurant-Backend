@@ -27,7 +27,8 @@ const modelDefiners = [
   require("../models/Cheques.model"),
   require("../models/Items.model"),
   require("../models/Orders.model"),
-  require("../models/paymentTypes.model"),
+  require("../models/Payments.model"),
+  require("../models/PaymentTypes.model"),
   require("../models/Tables.model")
 ];
 

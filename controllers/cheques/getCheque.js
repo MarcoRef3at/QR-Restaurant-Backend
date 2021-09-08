@@ -26,21 +26,16 @@ exports.getChequeOrders = asyncHandler(async (req, res, next) => {
   let orderz = await orders.findAll({
     where: { chequeId: req.params.id },
     attributes: {
-      exclude: ["createdAt", "updatedAt", "id", "chequeId"]
-    }
+      exclude: ["createdAt", "updatedAt", "id", "chequeId"],
+    },
   });
 
-  orderz = sumUpQuantitiesAndPrice(orderz);
-
-  // Get Cheque Total price
-  let total = orderz.reduce(
-    (acc, curr) => acc.dataValues.totalPrice + curr.dataValues.totalPrice
-  );
+  total = sumUpQuantitiesAndPrice(orderz);
 
   res.status(200).json({ success: true, total, data: orderz });
 });
 
-const sumUpQuantitiesAndPrice = orderz => {
+const sumUpQuantitiesAndPrice = (orderz) => {
   // Get total quanitity of each id
   const lookup = orderz.reduce((a, e) => {
     a[e.itemId] = a[e.itemId] + e.quantity || e.quantity;
@@ -48,7 +43,7 @@ const sumUpQuantitiesAndPrice = orderz => {
   }, {});
 
   // Modify quantity of each id
-  let modifiedQuantities = orderz.filter(e => {
+  let modifiedQuantities = orderz.filter((e) => {
     e.quantity = lookup[e.itemId];
     return lookup[e.itemId];
   });
@@ -63,7 +58,12 @@ const sumUpQuantitiesAndPrice = orderz => {
   );
 
   filtered.forEach(
-    item => (item.dataValues.totalPrice = item.quantity * item.unitPrice)
+    (item) => (item.dataValues.totalPrice = item.quantity * item.unitPrice)
   );
-  return filtered;
+
+  // Get Cheque Total price
+  let total = filtered.reduce(
+    (acc, curr) => acc.dataValues.totalPrice + curr.dataValues.totalPrice
+  );
+  return total;
 };

@@ -1,0 +1,433 @@
+{
+	"info": {
+		"_postman_id": "97907106-3383-4aae-9f7a-26716bde8acd",
+		"name": "QR_POS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Cheques",
+			"item": [
+				{
+					"name": "Get Cheques status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/cheque/0",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"cheque",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Cheques Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/cheque/1/orders",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"cheque",
+								"1",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Cheque",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"tableId\":1,\r\n    \"isVoid\":true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/cheque/1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"cheque",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Open New Cheque",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"tableId\":1,\r\n    \"isClosed\":false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/cheque",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"cheque"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Void Cheque",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/cheque/1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"cheque",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payments",
+			"item": [
+				{
+					"name": "Get Payment",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/Payment/0",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"Payment",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Payment",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"chequeId\": 1,\r\n    \"paymentTypeId\": 1,\r\n    \"costAmount\": 1,\r\n    \"dueAmount\": 100,\r\n    \"totalDueAmount\": 200,\r\n    \"amountRecieved\": 300,\r\n    \"amountChange\": 100\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/Payment/1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"Payment",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Payment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"chequeId\": 1,\r\n    \"paymentTypeId\": 1,\r\n    \"costAmount\": 1,\r\n    \"dueAmount\": 100,\r\n    \"totalDueAmount\": 500,\r\n    \"amountRecieved\": 900\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/Payment",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"Payment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Void Payment",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/Payment/1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"Payment",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Checkout",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"tableId\":1,\r\n    \"isVoid\":true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/cheque/1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"cheque",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Get Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/order/0",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"order",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Orders By ChequeId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/order/cheque/1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"order",
+								"cheque",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Orders By TableId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/order/table/1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"order",
+								"table",
+								"1"
+							]
+						},
+						"description": "Get Table's open cheque orders"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Order",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"chequeId\":3,\r\n    \"itemId\":1,\r\n    \"quantity\":9\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/order/1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"order",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create New Order By TableId",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"itemId\":1,\r\n    \"quantity\":9\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/order/table/122",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"order",
+								"table",
+								"122"
+							]
+						},
+						"description": "add order to opened cheque of the table\n\nif no open cheque found, it creates a new cheque and then add the order to it"
+					},
+					"response": []
+				},
+				{
+					"name": "Create New Order By ChequeId",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"itemId\":1,\r\n    \"quantity\":1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/order/cheque/1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"order",
+								"cheque",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Order",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ids\":[1,2]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/order",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"order"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

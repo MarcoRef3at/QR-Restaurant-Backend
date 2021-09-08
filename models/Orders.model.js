@@ -59,7 +59,8 @@ module.exports = (sequelize) => {
               orders.map(async (order) => {
                 // Validate cheque is open and not void
                 let { isClosed, isVoid } = order.cheque;
-                if (isClosed || isVoid) {
+                let { isDone } = order;
+                if (isClosed || isVoid || isDone) {
                   // If Cheque status is closed add the order id to invalidIds Array
                   return invalidIds.push(order.id);
                 }
@@ -83,7 +84,7 @@ module.exports = (sequelize) => {
                     validIds.length > 0
                       ? `Orders [${validIds}] Were deleted Successfully but`
                       : ""
-                  } Couldn't delete orders [${invalidIds}] as they are associated to closed cheques!`
+                  } Couldn't delete orders [${invalidIds}] as they are Done or associated to closed cheques!`
                 );
               });
           }

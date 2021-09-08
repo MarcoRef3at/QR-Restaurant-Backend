@@ -1,17 +1,8 @@
 const sequelize = require("../../sequelize");
-const { Devices, Features } = sequelize.models;
 const execludeAttribute = {
   attributes: {
     exclude: ["createdAt", "updatedAt"],
   },
-};
-const includeDevices = {
-  include: [
-    {
-      model: Devices,
-      attributes: ["name"],
-    },
-  ],
 };
 
 const getOrdersTotalPrice = (orderz) => {
@@ -49,6 +40,5 @@ const getOrdersTotalPrice = (orderz) => {
 
 module.exports = {
   execludeAttribute,
-  includeDevices,
   getOrdersTotalPrice,
 };

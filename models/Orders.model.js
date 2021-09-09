@@ -18,6 +18,10 @@ module.exports = (sequelize) => {
         allowNull: false,
         type: DataTypes.INTEGER,
       },
+      unitWholesalePrice: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
       quantity: {
         allowNull: false,
         type: DataTypes.INTEGER,
@@ -92,11 +96,11 @@ module.exports = (sequelize) => {
 
         beforeValidate: async (order) => {
           // Validates ItemId and stock available quantity
-          let sellingPrice = await getCurrentSellingPrice(
+          let { sellingPrice, wholeSalePrice } = await getCurrentSellingPrice(
             order.itemId,
             order.quantity
           );
-          await validateChequeId(order, sellingPrice);
+          await validateChequeId(order, sellingPrice, wholeSalePrice);
 
           // TODO: subtract quantity on order close
         },
@@ -117,14 +121,18 @@ module.exports = (sequelize) => {
         throw new Error(`Stock Quantity is only ${item.stockQuantity}!`);
       } else {
         // If Item Found and Quantity is available
-        return item.sellingPrice;
+        return {
+          sellingPrice: item.sellingPrice,
+          wholeSalePrice: item.wholesalePrice,
+        };
       }
     }
   };
 
-  const validateChequeId = async (order, sellingPrice) => {
+  const validateChequeId = async (order, sellingPrice, wholeSalePrice) => {
     // Save Current Selling Price to orders table
     order.unitPrice = sellingPrice;
+    order.unitWholesalePrice = wholeSalePrice;
 
     if (!order.chequeId) {
       throw new Error("ChequeId is Required!");

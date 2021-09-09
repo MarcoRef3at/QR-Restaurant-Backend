@@ -7,14 +7,14 @@ const ordersInit = async () => {
     orders
       .bulkCreate(_ORDERS, {
         validate: true,
-        individualHooks: true
+        individualHooks: true,
       })
       .then(async () => {
         const count = await orders.count();
         console.log("orders created:".bgYellow.black.bold, count);
       })
-      .catch(e => {
-        console.log("orders initializing error".red.bold);
+      .catch((e) => {
+        console.log("orders initializing error".red.bold, e);
       });
   }, 1000);
 };

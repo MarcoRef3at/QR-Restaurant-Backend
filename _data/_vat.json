@@ -1,0 +1,10 @@
+[
+  {
+    "name": "Taxes",
+    "rate": 0.14
+  },
+  {
+    "name": "Service",
+    "rate": 0.12
+  }
+]

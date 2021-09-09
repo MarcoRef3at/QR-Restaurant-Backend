@@ -29,7 +29,7 @@ exports.getChequeOrders = asyncHandler(async (req, res, next) => {
     },
   });
 
-  total = getOrdersTotalPrice(orderz);
+  let { total, filtered } = getOrdersTotalPrice(orderz);
 
-  res.status(200).json({ success: true, total, data: orderz });
+  res.status(200).json({ success: true, total, data: filtered });
 });

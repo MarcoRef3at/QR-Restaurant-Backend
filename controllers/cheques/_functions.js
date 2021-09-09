@@ -19,7 +19,6 @@ const getOrdersTotalPrice = (orderz) => {
   });
 
   // Remove duplicates from array
-
   let filtered = Object.values(
     modifiedQuantities.reduce(
       (acc, cur) => Object.assign(acc, { [cur.itemId]: cur }),
@@ -27,6 +26,7 @@ const getOrdersTotalPrice = (orderz) => {
     )
   );
 
+  // Adding Total Price to each order
   filtered.forEach(
     (item) => (item.dataValues.totalPrice = item.quantity * item.unitPrice)
   );
@@ -35,7 +35,8 @@ const getOrdersTotalPrice = (orderz) => {
   let total = filtered.reduce(
     (acc, curr) => acc.dataValues.totalPrice + curr.dataValues.totalPrice
   );
-  return total;
+  let output = { total, filtered };
+  return output;
 };
 
 module.exports = {

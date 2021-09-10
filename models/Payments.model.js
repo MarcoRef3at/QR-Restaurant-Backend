@@ -1,4 +1,4 @@
-const { DataTypes } = require("sequelize");
+const { DataTypes, where } = require("sequelize");
 const { getOrdersTotalPrice } = require("../controllers/cheques/_functions");
 
 module.exports = (sequelize) => {
@@ -108,6 +108,16 @@ module.exports = (sequelize) => {
             0
           );
 
+          // Get Previous Payments
+          let previousPayments = await sequelize.models.payments.findAll({
+            where: { chequeId: data.chequeId },
+          });
+
+          previousPayments = previousPayments.reduce(
+            (acc, curr) => acc + (curr.dataValues.amountRecieved || 0),
+            0
+          );
+
           // Due Amount Calculator
           data.dueAmount = getOrdersTotalPrice(orderz).total;
           // Total Due Amount Calculator
@@ -116,17 +126,28 @@ module.exports = (sequelize) => {
           );
           totalVat = vat.reduce((partial_sum, a) => partial_sum + a, 0);
 
+          // if No Discount parameter set dicount to 0
+          if (!data.discount) data.discount = 0;
           data.discount =
             data.discount > 1 ? data.discount / 100 : data.discount;
 
-          // totaldueamount = dueamount + vat - discount
+          // totaldueamount = dueamount + vat - discount - previousPayments
           data.totalDueAmount =
             data.dueAmount +
             totalVat * data.dueAmount -
             data.dueAmount * data.discount;
+          console.log("data.totalDueAmount:", data.totalDueAmount);
 
           // Amount Change Calculator
           data.amountChange = data.amountRecieved - data.totalDueAmount;
+
+          // Close Cheque if totalDueAmount is Paid
+          if (data.amountRecieved + previousPayments >= data.totalDueAmount) {
+            sequelize.models.cheques.update(
+              { isClosed: true },
+              { where: { id: data.chequeId } }
+            );
+          }
         },
       },
     }

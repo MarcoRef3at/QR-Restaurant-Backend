@@ -1,4 +1,3 @@
-const sequelize = require("../../sequelize");
 const execludeAttribute = {
   attributes: {
     exclude: ["createdAt", "updatedAt"],
@@ -30,11 +29,17 @@ const getOrdersTotalPrice = (orderz) => {
   filtered.forEach(
     (item) => (item.dataValues.totalPrice = item.quantity * item.unitPrice)
   );
-
   // Get Cheque Total price
-  let total = filtered.reduce(
-    (acc, curr) => acc.dataValues.totalPrice + curr.dataValues.totalPrice
-  );
+  let total;
+
+  // Sum All Total Prices
+  if (filtered.length > 1) {
+    total = filtered.reduce(
+      (acc, curr) => acc.dataValues.totalPrice + curr.dataValues.totalPrice
+    );
+  } else {
+    total = filtered[0].dataValues.totalPrice;
+  }
   let output = { total, filtered };
   return output;
 };

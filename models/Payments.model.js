@@ -86,10 +86,19 @@ module.exports = (sequelize) => {
     {
       hooks: {
         beforeValidate: async (data) => {
+          // Validate Cheque is open
+          let cheque = await sequelize.models.cheques.findByPk(data.chequeId);
+          if (!cheque) throw new Error("No Cheque with the requested ID");
+          if (cheque.isClosed || cheque.isvoid)
+            throw new Error("Cannot Make Transaction on a closed cheque");
+
           let orderz = await sequelize.models.orders.findAll({
             where: { chequeId: data.chequeId },
           });
-
+          // If No Orders Found
+          if (orderz.length == 0) {
+            throw new Error("No Orders for this cheque");
+          }
           //  costAmount calculator
           let costs = orderz.map(
             ({ unitWholesalePrice, quantity }) => unitWholesalePrice * quantity
@@ -100,8 +109,7 @@ module.exports = (sequelize) => {
           );
 
           // Due Amount Calculator
-          data.dueAmount = getOrdersTotalPrice(orderz);
-
+          data.dueAmount = getOrdersTotalPrice(orderz).total;
           // Total Due Amount Calculator
           let vat = (await sequelize.models.vat.findAll()).map(
             ({ rate }) => rate
@@ -110,7 +118,7 @@ module.exports = (sequelize) => {
 
           data.discount =
             data.discount > 1 ? data.discount / 100 : data.discount;
-          console.log("data.discount:", data.discount);
+
           // totaldueamount = dueamount + vat - discount
           data.totalDueAmount =
             data.dueAmount +

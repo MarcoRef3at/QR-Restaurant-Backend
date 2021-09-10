@@ -5,6 +5,7 @@ const { execludeAttribute } = require("./_functions");
 const { cheques } = sequelize.models;
 
 exports.createCheque = asyncHandler(async (req, res, next) => {
+  console.log("req.body:", req);
   // Create Zone in Databaase
   try {
     const cheque = await cheques.create(req.body);
